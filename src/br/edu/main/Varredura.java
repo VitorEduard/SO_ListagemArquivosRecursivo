@@ -1,6 +1,6 @@
 package br.edu.main;
 
-public class Varredura {
+public class Varredura implements Comparable<Varredura> {
 
     public Varredura(String arquivosEncontradosStr, Long tempoDecorridoNanoSegundos, Integer qtdArquivosEncontrados, Integer qtdPastasEncontradas) {
         this.arquivosEncontradosStr = arquivosEncontradosStr;
@@ -35,6 +35,14 @@ public class Varredura {
         return qtdPastasEncontradas;
     }
 
-
+    @Override
+    public int compareTo(Varredura v) {
+        if (this.getTempoDecorridoSegundos() > v.getTempoDecorridoSegundos()) {
+            return 1;
+        } else if (this.getTempoDecorridoSegundos() < v.getTempoDecorridoSegundos()) {
+            return -1;
+        }
+        return 0;
+    }
 }
 

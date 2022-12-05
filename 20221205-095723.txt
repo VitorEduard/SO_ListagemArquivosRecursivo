@@ -1,0 +1,13 @@
+Caminho: \C:\Users\iamdu\Downloads
+N Execucoes: 7
+Exexcao em Pilha
+
+0.28334758s
+0.1839295s
+0.1909063s
+0.1955737s
+0.1803295s
+0.164008s
+0.149843s
+Media: 0.18294940292835235
+Mediana: 0.18032950162887573
