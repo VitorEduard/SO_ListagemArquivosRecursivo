@@ -2,18 +2,23 @@ package br.edu.main;
 
 public class Varredura implements Comparable<Varredura> {
 
-    public Varredura(String arquivosEncontradosStr, Long tempoDecorridoNanoSegundos, Integer qtdArquivosEncontrados, Integer qtdPastasEncontradas) {
+    public Varredura(String arquivosEncontradosStr, Long tempoDecorridoNanoSegundos, Integer qtdArquivosEncontrados, Integer qtdPastasEncontradas, Long tempoDecorridoEmOperacoesCollections) {
         this.arquivosEncontradosStr = arquivosEncontradosStr;
         this.qtdArquivosEncontrados = qtdArquivosEncontrados;
         this.tempoDecorridoNanoSegundos = tempoDecorridoNanoSegundos;
         this.qtdPastasEncontradas = qtdPastasEncontradas;
+        this.tempoDecorridoEmOperacoesCollections = tempoDecorridoEmOperacoesCollections;
     }
 
     private Long tempoDecorridoNanoSegundos;
     private String arquivosEncontradosStr;
     private Integer qtdArquivosEncontrados;
     private Integer qtdPastasEncontradas;
+    private Long tempoDecorridoEmOperacoesCollections;
 
+    public Float getTempoDecorridoEmOperacoesCollections() {
+        return tempoDecorridoEmOperacoesCollections / 1_000_000_000f;
+    }
 
     public Long getTempoDecorridoNanoSegundos() {
         return tempoDecorridoNanoSegundos;

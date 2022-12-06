@@ -2,12 +2,13 @@ package br.edu.metodos;
 
 import java.io.File;
 
-public class Recursivo extends VarredorArquivosAbstract {
+public class VarredorRecursivo extends VarredorAbstract {
 
     @Override
    protected void executarVarredura(String caminho) {
         File file = new File(caminho);
         executarVarreduraRecursiva(file, 0);
+        super.qtdArquivosEncontrados--;
     }
 
     private void executarVarreduraRecursiva(File file, int qtdTabs) {

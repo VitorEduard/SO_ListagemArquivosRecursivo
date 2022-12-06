@@ -1,6 +1,6 @@
 package br.edu.main;
 
-import br.edu.metodos.Recursivo;
+import br.edu.metodos.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,15 +13,15 @@ public class Main {
 
     public static void main(String[] args) {
         //INICIALIZACAO
-        String caminho = "\\C:\\Users\\iamdu\\Downloads"; //Caminho a ser realizado as varreduras
+        String caminho = "\\E:\\Arquivos de Programas"; //Caminho a ser realizado as varreduras
         int numeroExecucoes = 5; //Número total de varreduras a serem realizadas
         int numeroDescarteMinimasMaximas = 1; //Número de amostras minimas e maximas a serem descartadas
 
         numeroExecucoes = numeroExecucoes + numeroDescarteMinimasMaximas * 2;
 
         //EXECUCAO PILHA
-        Recursivo pilha = new Recursivo();
-        ArrayList<Varredura> varredurasPilha = new ArrayList<Varredura>();
+        VarredorStack pilha = new VarredorStack();
+        var varredurasPilha = new ArrayList<Varredura>();
         String relatorioExecucao =
                 "Caminho: " + caminho + "\n" +
                 "N Execucoes: " + numeroExecucoes + "\n" +
@@ -63,5 +63,30 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        VarredorAbstract varredor = new VarredorStack();
+        Varredura varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+        System.out.println("Stack: " + varredura.getTempoDecorridoEmOperacoesCollections());
+
+        varredor = new VarredorLinkedList();
+        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+        System.out.println("LinkedList: " + varredura.getTempoDecorridoEmOperacoesCollections());
+
+        varredor = new VarredorArrayList();
+        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+        System.out.println("ArrayList: " + varredura.getTempoDecorridoEmOperacoesCollections());
+
+        varredor = new VarredorHashSet();
+        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+        System.out.println("HashSet: " + varredura.getTempoDecorridoEmOperacoesCollections());
+
+        varredor = new VarredorRecursivo();
+        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+        System.out.println(varredura.getQtdArquivosEncontrados());
+        System.out.println(varredura.getQtdPastasEncontradas());
+        System.out.println(varredura.getTempoDecorridoEmOperacoesCollections());
+
+
     }
 }
