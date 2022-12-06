@@ -13,43 +13,31 @@ public class Main {
 
     public static void main(String[] args) {
         //INICIALIZACAO
-        String caminho = "\\E:\\Arquivos de Programas"; //Caminho a ser realizado as varreduras
-        int numeroExecucoes = 5; //Número total de varreduras a serem realizadas
-        int numeroDescarteMinimasMaximas = 1; //Número de amostras minimas e maximas a serem descartadas
-
+        String caminho = "\\C:\\Users\\USUARIO\\Downloads\\";
+        int numeroExecucoes = 100;
+        int numeroDescarteMinimasMaximas = 3;
         numeroExecucoes = numeroExecucoes + numeroDescarteMinimasMaximas * 2;
+        String logVarredura = "Caminho: " + caminho + "\n";
+        logVarredura += "N Execucoes: " + numeroExecucoes + "\n";
+        logVarredura += "N Descartes Minimas Maximas: " + numeroDescarteMinimasMaximas + "\n";
+        logVarredura += "------------------------------------------------\n";
 
-        //EXECUCAO PILHA
-        VarredorStack pilha = new VarredorStack();
-        var varredurasPilha = new ArrayList<Varredura>();
-        String relatorioExecucao =
-                "Caminho: " + caminho + "\n" +
-                "N Execucoes: " + numeroExecucoes + "\n" +
-                "Exexcao em Pilha\n\n";
+        //EXECUCAO
+        VarredorAbstract varredor = new VarredorStack();
+        logVarredura += "Stack:\n";
+        logVarredura += executarVarredura(varredor, caminho, numeroExecucoes, numeroDescarteMinimasMaximas);
 
-        for (int i = 0; i < numeroExecucoes; i++) {
-            Varredura varredura = pilha.executarVarreduraCalculandoTempo(caminho);
-            varredurasPilha.add(varredura);
+        varredor = new VarredorLinkedList();
+        logVarredura += "LinkedList:\n";
+        logVarredura += executarVarredura(varredor, caminho, numeroExecucoes, numeroDescarteMinimasMaximas);
 
-            relatorioExecucao += varredura.getTempoDecorridoSegundos() + "s\n";
-        }
+        varredor = new VarredorArrayList();
+        logVarredura += "ArrayList:\n";
+        logVarredura += executarVarredura(varredor, caminho, numeroExecucoes, numeroDescarteMinimasMaximas);
 
-        //ANALISE PILHA
-        for (int j = 0; j < numeroDescarteMinimasMaximas; j++) {
-            varredurasPilha.remove(Collections.max(varredurasPilha));
-            varredurasPilha.remove(Collections.min(varredurasPilha));
-        }
-
-        Collections.sort(varredurasPilha);
-        int metade = varredurasPilha.size() / 2;
-        metade = metade > 0 && metade % 2 == 0 ? metade - 1 : metade;
-
-        double mediana = varredurasPilha.get(metade).getTempoDecorridoSegundos();
-        double media = varredurasPilha.stream().mapToDouble(Varredura::getTempoDecorridoSegundos).sum() / varredurasPilha.size();
-
-        relatorioExecucao +=
-                "Media: " + media + "\n" +
-                "Mediana: " + mediana;
+        varredor = new VarredorHashSet();
+        logVarredura += "HashSet:\n";
+        logVarredura += executarVarredura(varredor, caminho, numeroExecucoes, numeroDescarteMinimasMaximas);
 
         //CRIACAO RELATORIO DE EXECUCAO
         try {
@@ -57,36 +45,47 @@ public class Main {
             LocalDateTime now = LocalDateTime.now();
             FileWriter myWriter = new FileWriter(dtf.format(now) + ".txt");
 
-            myWriter.write(relatorioExecucao);
+            myWriter.write(logVarredura);
 
             myWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static String executarVarredura(VarredorAbstract varredor, String caminho, int numeroExecucoes, int numeroDescarteMinimasMaximas){
+        var varreduras = new ArrayList<Varredura>();
 
-        VarredorAbstract varredor = new VarredorStack();
-        Varredura varredura = varredor.executarVarreduraCalculandoTempo(caminho);
-        System.out.println("Stack: " + varredura.getTempoDecorridoEmOperacoesCollections());
+        String logVarredura = "";
 
-        varredor = new VarredorLinkedList();
-        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
-        System.out.println("LinkedList: " + varredura.getTempoDecorridoEmOperacoesCollections());
+        for (int i = 0; i < numeroExecucoes; i++) {
+            Varredura varredura = varredor.executarVarreduraCalculandoTempo(caminho);
+            varreduras.add(varredura);
 
-        varredor = new VarredorArrayList();
-        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
-        System.out.println("ArrayList: " + varredura.getTempoDecorridoEmOperacoesCollections());
+            System.out.println(varredura.getQtdArquivosEncontrados());
+            System.out.println(varredura.getQtdPastasEncontradas());
+            System.out.println(varredura.getTempoDecorridoEmOperacoesCollections());
 
-        varredor = new VarredorHashSet();
-        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
-        System.out.println("HashSet: " + varredura.getTempoDecorridoEmOperacoesCollections());
+            logVarredura += varredura.getTempoDecorridoSegundos() + "s\n";
 
-        varredor = new VarredorRecursivo();
-        varredura = varredor.executarVarreduraCalculandoTempo(caminho);
-        System.out.println(varredura.getQtdArquivosEncontrados());
-        System.out.println(varredura.getQtdPastasEncontradas());
-        System.out.println(varredura.getTempoDecorridoEmOperacoesCollections());
+            varredor.iniTemp();
+        }
 
+        for (int j = 0; j < numeroDescarteMinimasMaximas; j++) {
+            varreduras.remove(Collections.max(varreduras));
+            varreduras.remove(Collections.min(varreduras));
+        }
+        Collections.sort(varreduras);
+        int metade = varreduras.size() / 2;
+        metade = metade > 0 && metade % 2 == 0 ? metade - 1 : metade;
 
+        double mediana = varreduras.get(metade).getTempoDecorridoSegundos();
+        double media = varreduras.stream().mapToDouble(Varredura::getTempoDecorridoSegundos).sum() / varreduras.size();
+
+        logVarredura += "Media: " + media + "\n";
+        logVarredura += "Mediana: " + mediana + "\n";
+        logVarredura += "------------------------------------------------\n";
+
+        return logVarredura;
     }
 }

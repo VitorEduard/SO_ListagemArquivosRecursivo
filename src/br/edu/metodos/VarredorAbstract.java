@@ -12,7 +12,7 @@ public abstract class VarredorAbstract {
     private Long tempMetodo;
 
 
-    protected void iniTemp() {
+    public void iniTemp() {
         this.tempMetodo = System.nanoTime();
     }
 
@@ -28,6 +28,4 @@ public abstract class VarredorAbstract {
     }
 
     protected abstract void executarVarredura(String caminho);
-
-
 }
